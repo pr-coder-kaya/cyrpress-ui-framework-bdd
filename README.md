@@ -27,11 +27,17 @@ This will create a cypress folder with default directories and configuration fil
 npx cypress open
 ```
 
-## Install Cucumber Preprocessor
+## Install @badeball/cypress-cucumber-preprocessor
 This preprocessor aims to provide a developer experience and behavior similar to that of Cucumber, to Cypress.
 
 ```bash
-npm install cypress-cucumber-preprocessor -D
+npm install @badeball/cypress-cucumber-preprocessor -D
+```
+
+## Install @bahmutov/cypress-esbuild-preprocessor
+
+```bash
+npm install @bahmutov/cypress-esbuild-preprocessor -D
 ```
 
 ## Introduction
@@ -45,20 +51,31 @@ Feature: TechGlobal Home Page
     Then I should see the logo
 ```
 
-## Update  cypress.config.js with below code
+## Update cypress.config.js with below code
 
 ```javascript
 const { defineConfig } = require("cypress");
-const cucumber = require("cypress-cucumber-preprocessor").default;
+const createBundler = require("@bahmutov/cypress-esbuild-preprocessor");
+const { addCucumberPreprocessorPlugin } = require("@badeball/cypress-cucumber-preprocessor");
+const { createEsbuildPlugin } = require("@badeball/cypress-cucumber-preprocessor/esbuild");
+
+async function setupNodeEvents(on, config) {
+  await addCucumberPreprocessorPlugin(on, config);
+
+  on(
+    "file:preprocessor",
+    createBundler({
+      plugins: [createEsbuildPlugin(config)],
+    })
+  );
+
+  return config;
+}
 
 module.exports = defineConfig({
   e2e: {
-    setupNodeEvents(on, config) {
-      // implement node event listeners here
-      on("file:preprocessor", cucumber())
-    },
     specPattern: "**/*.feature",
-    supportFile: false,
+    setupNodeEvents,
   },
 });
 ```
@@ -78,19 +95,19 @@ module.exports = defineConfig({
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@badeball/cypress-cucumber-preprocessor": "^20.0.5",
+    "@bahmutov/cypress-esbuild-preprocessor": "^2.2.1",
     "cypress": "^13.10.0",
-    "cypress-cucumber-preprocessor": "^4.3.1"
   },
   "cypress-cucumber-preprocessor": {
     "nonGlobalStepDefinitions": false,
-    "step_definitions": "cypress/e2e/step-definitions"
+    "stepDefinitions": "cypress/e2e/step_definitions/**/*.js"
   }
 }
 ```
 
 # Create the Folder Structure 
 Create the following directory structure
-
 
 ```bash
 cypress-automation/
@@ -132,7 +149,7 @@ touch cypress/e2e/step_definitions/techglobal.cy.js
 ## Write Your Actual Code
 ``` javascript
 /// <reference types="cypress" />
-import { Given, Then } from "cypress-cucumber-preprocessor/steps";
+import { Given, Then } from "@badeball/cypress-cucumber-preprocessor";
 
 Given("I am on the TechGlobal Home Page", () => {
     cy.visit('https://techglobal-training.com/')
@@ -227,13 +244,13 @@ Feature: TechGlobal Validation
 ## Add the New Step Definitions
 ``` javascript
 /// <reference types="cypress" />
-import { Given, Then } from "cypress-cucumber-preprocessor/steps";
+import { Given, When, Then } from "@badeball/cypress-cucumber-preprocessor";
 import LoginPage from "../pages/LoginPage";
 
 const loginPage = new LoginPage();
 
-Given("I am on the TechGlobal Home Page", () => {
-    cy.visit('https://techglobal-training.com/')
+Given("I am on the TechGlobal Home Page", function () {
+    cy.visit('https://www.techglobal-training.com/')
 });
 
 Then("I should see the url and title properly displayed", () => {
@@ -249,11 +266,11 @@ When("I enter username as {string}", (username) => {
     loginPage.enterUsername(username)
 });
 
-And("I enter password as {string}", (password) => {
+When("I enter password as {string}", (password) => {
     loginPage.enterPassword(password)
 });
 
-And("I click on the login button", () => {
+When("I click on the login button", () => {
     loginPage.clickOnLoginButton()
 });
 
@@ -290,18 +307,30 @@ baseURL=https://www.techglobal-training.com/
 
 ``` javascript
 const { defineConfig } = require("cypress");
-const cucumber = require("cypress-cucumber-preprocessor").default;
+const createBundler = require("@bahmutov/cypress-esbuild-preprocessor");
+const { addCucumberPreprocessorPlugin } = require("@badeball/cypress-cucumber-preprocessor");
+const { createEsbuildPlugin } = require("@badeball/cypress-cucumber-preprocessor/esbuild");
+
 require('dotenv').config();
+
+async function setupNodeEvents(on, config) {
+  await addCucumberPreprocessorPlugin(on, config);
+
+  on(
+    "file:preprocessor",
+    createBundler({
+      plugins: [createEsbuildPlugin(config)],
+    })
+  );
+
+  return config;
+}
 
 module.exports = defineConfig({
   env: { ...process.env },
   e2e: {
-    setupNodeEvents(on, config) {
-      // implement node event listeners here
-      on("file:preprocessor", cucumber())
-    },
     specPattern: "**/*.feature",
-    supportFile: false,
+    setupNodeEvents,
   },
 });
 ```
@@ -310,12 +339,12 @@ module.exports = defineConfig({
 
 ``` javascript
 /// <reference types="cypress" />
-import { Given, Then } from "cypress-cucumber-preprocessor/steps";
+import { Given, When, Then } from "@badeball/cypress-cucumber-preprocessor";
 import LoginPage from "../pages/LoginPage";
 
 const loginPage = new LoginPage();
 
-Given("I am on the TechGlobal Home Page", () => {
+Given("I am on the TechGlobal Home Page", function () {
     cy.visit(Cypress.env('baseURL'))
 });
 
@@ -332,11 +361,11 @@ When("I enter username as {string}", (username) => {
     loginPage.enterUsername(username)
 });
 
-And("I enter password as {string}", (password) => {
+When("I enter password as {string}", (password) => {
     loginPage.enterPassword(password)
 });
 
-And("I click on the login button", () => {
+When("I click on the login button", () => {
     loginPage.clickOnLoginButton()
 });
 
