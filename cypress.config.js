@@ -6,7 +6,6 @@ const { createEsbuildPlugin } = require("@badeball/cypress-cucumber-preprocessor
 require('dotenv').config();
 
 async function setupNodeEvents(on, config) {
-  // This is required for the preprocessor to be able to generate JSON reports after each run, and more,
   await addCucumberPreprocessorPlugin(on, config);
 
   on(
@@ -23,7 +22,6 @@ async function setupNodeEvents(on, config) {
 module.exports = defineConfig({
   env: { ...process.env },
   e2e: {
-    baseUrl: "https://duckduckgo.com",
     specPattern: "**/*.feature",
     setupNodeEvents,
   },
