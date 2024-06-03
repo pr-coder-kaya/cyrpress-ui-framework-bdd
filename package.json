@@ -10,12 +10,13 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@badeball/cypress-cucumber-preprocessor": "^20.0.5",
+    "@bahmutov/cypress-esbuild-preprocessor": "^2.2.1",
     "cypress": "^13.10.0",
-    "cypress-cucumber-preprocessor": "^4.3.1",
     "dotenv": "^16.4.5"
   },
   "cypress-cucumber-preprocessor": {
     "nonGlobalStepDefinitions": false,
-    "step_definitions": "cypress/e2e/step_definitions"
+    "stepDefinitions": "cypress/e2e/step_definitions/**/*.js"
   }
 }

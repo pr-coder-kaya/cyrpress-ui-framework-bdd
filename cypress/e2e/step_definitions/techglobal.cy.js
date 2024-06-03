@@ -1,10 +1,10 @@
 /// <reference types="cypress" />
-import { Given, Then } from "cypress-cucumber-preprocessor/steps";
+import { Given, When, Then } from "@badeball/cypress-cucumber-preprocessor";
 import LoginPage from "../pages/LoginPage";
 
 const loginPage = new LoginPage();
 
-Given("I am on the TechGlobal Home Page", () => {
+Given("I am on the TechGlobal Home Page", function () {
     cy.visit(Cypress.env('baseURL'))
 });
 
@@ -21,11 +21,11 @@ When("I enter username as {string}", (username) => {
     loginPage.enterUsername(username)
 });
 
-And("I enter password as {string}", (password) => {
+When("I enter password as {string}", (password) => {
     loginPage.enterPassword(password)
 });
 
-And("I click on the login button", () => {
+When("I click on the login button", () => {
     loginPage.clickOnLoginButton()
 });
 
