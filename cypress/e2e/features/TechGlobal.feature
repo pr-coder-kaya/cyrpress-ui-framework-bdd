@@ -1,3 +1,4 @@
+@Smoke @Regression
 Feature: TechGlobal Validation
 
   Scenario: Validate the Home Page Visit

@@ -19,7 +19,11 @@ async function setupNodeEvents(on, config) {
 }
 
 module.exports = defineConfig({
-  env: { ...process.env },
+  env: { 
+    ...process.env,
+    filterSpecs: true,
+    omitFiltered: true
+   },
   e2e: {
     specPattern: "**/*.feature",
     setupNodeEvents,
