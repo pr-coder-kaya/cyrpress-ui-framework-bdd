@@ -374,6 +374,14 @@ Then("I should see the success message as {string}", (message) => {
 });
 ```
 
+## Diagnostics / dry run
+
+A diagnostics utility is provided to verify that each step matches one, and only one, step definition. This can be run as shown below.
+
+```bash
+npx cypress-cucumber-diagnostics
+```
+
 # Run Tests
 
 ```
