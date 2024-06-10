@@ -488,5 +488,5 @@ This section defines shorthand commands for running your Cypress tests with diff
 # Run Tests
 
 ```
-npx cypress run
+npm run test:smoke
 ```
