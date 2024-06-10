@@ -113,9 +113,9 @@ Create the following directory structure
 cypress-automation/
 ├── cypress/
 │   ├── e2e/
-|   |   ├── features/
-|   |   ├── tests/
-|   |   └── pages/
+│   │   ├── features/
+│   │   ├── tests/
+│   │   └── pages/
 │   ├── fixtures/
 │   └── support/
 ├── node_modules/
@@ -378,8 +378,101 @@ Then("I should see the success message as {string}", (message) => {
 
 A diagnostics utility is provided to verify that each step matches one, and only one, step definition. This can be run as shown below.
 
-```bash
+``` bash
 npx cypress-cucumber-diagnostics
+```
+
+## Tags
+
+Integrating tags with Cypress feature files involves leveraging Cucumber tags to organize and selectively run your tests based on predefined criteria.
+
+``` gherkin
+@Smoke @Regression
+Feature: TechGlobal Validation
+
+  Scenario: Validate the Home Page Visit
+    Given I am on the TechGlobal Home Page
+    Then I should see the url and title properly displayed
+
+  Scenario: Validate the Successful Login
+    Given I am on the TechGlobal Login Project
+    When I enter username as "TechGlobal"
+    And I enter password as "Test1234"
+    And I click on the login button
+    Then I should see the success message as "You are logged in"
+```
+
+### Configure cypress.config.js
+Normally when running a subset of scenarios using cypress run --env tags=@foo, you could potentially encounter files containing no matching scenarios. These can be pre-filtered away by setting filterSpecs to true, thus saving you execution time.
+
+By default, all filtered tests are made pending using it.skip method. If you want to completely omit them, set omitFiltered to true.
+
+```javascript
+const { defineConfig } = require("cypress");
+const createBundler = require("@bahmutov/cypress-esbuild-preprocessor");
+const { addCucumberPreprocessorPlugin } = require("@badeball/cypress-cucumber-preprocessor");
+const { createEsbuildPlugin } = require("@badeball/cypress-cucumber-preprocessor/esbuild");
+
+require('dotenv').config();
+
+async function setupNodeEvents(on, config) {
+  await addCucumberPreprocessorPlugin(on, config);
+
+  on(
+    "file:preprocessor",
+    createBundler({
+      plugins: [createEsbuildPlugin(config)],
+    })
+  );
+
+  return config;
+}
+
+module.exports = defineConfig({
+  env: { 
+    ...process.env,
+    filterSpecs: true,
+    omitFiltered: true
+   },
+  e2e: {
+    specPattern: "**/*.feature",
+    setupNodeEvents,
+  },
+});
+```
+
+# Creating Custom Scripts
+
+Open package.json file and add the following scripts to the 'scripts' section of your package.json file. 
+
+This section defines shorthand commands for running your Cypress tests with different configurations.
+
+```json
+{
+  "name": "cypress-ui-framework-bdd",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "npx cypress run",
+    "test:dryRun": "npx cypress-cucumber-diagnostics",
+    "test:smoke": "npx cypress run --env tags=@Smoke",
+    "test:regression": "npx cypress run --env tags=@Regression"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@badeball/cypress-cucumber-preprocessor": "^20.0.5",
+    "@bahmutov/cypress-esbuild-preprocessor": "^2.2.1",
+    "cypress": "^13.10.0",
+    "dotenv": "^16.4.5"
+  },
+  "cypress-cucumber-preprocessor": {
+    "nonGlobalStepDefinitions": false,
+    "stepDefinitions": "cypress/e2e/step_definitions/**/*.js"
+  }
+}
 ```
 
 # Run Tests

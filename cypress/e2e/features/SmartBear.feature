@@ -1,3 +1,4 @@
+@Regression
 Feature: Smartbear Validation
 
     Background:

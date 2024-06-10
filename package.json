@@ -4,7 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "npx cypress run",
+    "test:dryRun": "npx cypress-cucumber-diagnostics",
+    "test:smoke": "npx cypress run --env tags=@Smoke",
+    "test:regression": "npx cypress run --env tags=@Regression"
   },
   "keywords": [],
   "author": "",
