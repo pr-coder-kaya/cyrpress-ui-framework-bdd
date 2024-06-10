@@ -25,6 +25,7 @@ module.exports = defineConfig({
     omitFiltered: true
    },
   e2e: {
+    reporter: require.resolve('@badeball/cypress-cucumber-preprocessor/pretty-reporter'),
     specPattern: "**/*.feature",
     setupNodeEvents,
   },
