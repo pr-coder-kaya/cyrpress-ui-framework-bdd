@@ -603,5 +603,5 @@ report.generate({
 # Run Tests
 
 ```
-npm run test:smoke
+npm run test:smoke:prettier
 ```
