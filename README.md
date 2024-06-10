@@ -146,6 +146,16 @@ Feature: TechGlobal Validation
 touch cypress/e2e/step_definitions/techglobal.cy.js
 ```
 
+## Configure Visual Studio Code and Install Extensions
+
+1. VSCode Cucumber (Gherkin) Language Support + Format + Steps/PageObjects Autocomplete:
+
+This extension adds rich language support for the Cucumber (Gherkin) language to VS Code
+
+2. Cuke Step Definition Generator:
+
+This extension will help the user by generating the Cucumber Glue / Step Definition snippet for the selected statement. It will come as very handy while working with Cucumber JS in VS Code.
+
 ## Write Your Actual Code
 ``` javascript
 /// <reference types="cypress" />
