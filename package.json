@@ -20,6 +20,10 @@
   },
   "cypress-cucumber-preprocessor": {
     "nonGlobalStepDefinitions": false,
-    "stepDefinitions": "cypress/e2e/step_definitions/**/*.js"
+    "stepDefinitions": "cypress/e2e/step_definitions/**/*.js",
+    "html": {
+      "enabled": true,
+      "output": "cypress/reports/cucumber-html/cucumber-report.html"
+    }
   }
 }

@@ -485,6 +485,50 @@ This section defines shorthand commands for running your Cypress tests with diff
 }
 ```
 
+## HTML reports
+
+### Install Multiple Cucumber HTML Reporter Dependency
+
+Multiple Cucumber HTML Reporter is a reporting module for Cucumber to parse the JSON output to a beautiful report. 
+
+``` bash
+npm install multiple-cucumber-html-reporter -D
+```
+
+### Update package.json
+
+``` json
+{
+  "name": "cypress-ui-framework-bdd",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "npx cypress run",
+    "test:dryRun": "npx cypress-cucumber-diagnostics",
+    "test:smoke": "npx cypress run --env tags=@Smoke",
+    "test:regression": "npx cypress run --env tags=@Regression"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@badeball/cypress-cucumber-preprocessor": "^20.0.5",
+    "@bahmutov/cypress-esbuild-preprocessor": "^2.2.1",
+    "cypress": "^13.10.0",
+    "dotenv": "^16.4.5"
+  },
+  "cypress-cucumber-preprocessor": {
+    "nonGlobalStepDefinitions": false,
+    "stepDefinitions": "cypress/e2e/step_definitions/**/*.js",
+    "html": {
+      "enabled": true,
+      "output": "reports/cucumber-html/cucumber-report.html"
+    }
+  }
+}
+```
+
 # Run Tests
 
 ```
